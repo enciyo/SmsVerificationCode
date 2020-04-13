@@ -63,7 +63,7 @@ internal class SmsVerificationCodeReceiverManagementImp(
     }
 
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun registerSmsVerificationCodeReceiver() {
         IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION).also {
             mActivity.get()?.registerReceiver(mSmsVerificationCodeReceiver, it)
@@ -83,8 +83,9 @@ internal class SmsVerificationCodeReceiverManagementImp(
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun clearListenersAndReceivers() {
-        mSmsVerificationCodeReceiverListener.clear()
         mActivity.get()?.unregisterReceiver(mSmsVerificationCodeReceiver)
+        mSmsVerificationCodeReceiver.listener = null
+        mSmsVerificationCodeReceiverListener.clear()
     }
 
 
